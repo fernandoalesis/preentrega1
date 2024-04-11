@@ -36,25 +36,21 @@ router.get('/:pid', async (req, res) => {
 
 router.post('/', async (req, res) => {
 
-    
-    
-    const { title, description, price , thumbnail, code, stock } = req.body
+    const { title, description, price , thumbnail, code, stock, category } = req.body
 
-    if (!title || !description || !price || !code || !stock) return res.send({ status: 'error', error: 'faltan completar campos' })
+    if (!title || !description || !price || !code || !stock || !category ) return res.send({ status: 'error', error: 'faltan completar campos' })
 
     const newProduct = {
-    //CAMBIAR 
         title,
         description,
         price,
         thumbnail,
         code,
-        stock
-
+        stock,
+        category
     }
 
     res.status(200).send(await products.addProduct(newProduct))
-   
 
 })
 

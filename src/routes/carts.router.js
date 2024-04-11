@@ -1,23 +1,40 @@
 import{Router} from 'express'
 import {CartManager} from '../managers/cartManager.js'
 
-const router = Router()
+//instancias
+const cartsRouter = Router()
 const path = './src/file/Carts.json'
 const carts = new CartManager(path)
 
+cartsRouter.post('/', async (req, res) => {
 
-//traer un carrito
-router.get('/:cid', async (req,res)=>{})
+    const { products: [] } = req.body
 
-//crear un carrito
-router.post('/', async (req,res)=>{})
+    const newCart = {
 
-//agregar un producto a un carrito
+        products: []
 
-router.post('/:cid/products/:pid', async (req,res)=>{
-    const{cid, pid} = req.params
-    const resp = await carts.addProductToCart(cid, {id:pid, quantity:1})
+    }
+
+    res.status(200).send(await carts.createCart(newCart))
+
+}) 
+
+cartsRouter.get('/:cid', async (req, res) => {
+
+    const { cid } = req.params
+
+    res.send(await carts.getCartById(cid))
+
 })
 
+cartsRouter.post('/:cid/products/:pid ', async (req, res) => {
 
-export default router
+    const { cid, pid } = req.params
+
+    const answer = await carts.addProductToCart(cid, {product:pid, quantity:1}) 
+
+    res.send(await carts.addProductToCart(cid, pid))
+
+})
+export default cartsRouter
